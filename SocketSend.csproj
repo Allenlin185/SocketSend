@@ -56,8 +56,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HotaProgramMethod">
-      <HintPath>..\HotaProgramMethod\bin\Debug\HotaProgramMethod.dll</HintPath>
+    <Reference Include="LeonardoXMLLibrary">
+      <HintPath>..\..\公用程式\Library\LeonardoXMLLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="ProgramMethod">
+      <HintPath>..\..\公用程式\Library\ProgramMethod.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -74,10 +77,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="XMLMethod, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\XMLMethod\bin\Debug\XMLMethod.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

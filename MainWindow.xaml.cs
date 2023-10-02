@@ -7,8 +7,8 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using HotaProgramMethod;
-using XMLMethod;
+using ProgramMethod;
+using LeonardoXMLLibrary;
 using System.Xml;
 using System.Diagnostics;
 
@@ -23,8 +23,8 @@ namespace SocketSend
         private byte[] Data = new byte[1024];
         public delegate void MyInvoke(string str1);
         SynchronizationContext _syncContext = null;
-        private ProgramMethod PGMethod = new ProgramMethod();
-        private GenerateXML hotaXMLmethod = new GenerateXML();
+        private FileMethod PGMethod = new FileMethod();
+        private LeonardoXML hotaXMLmethod = new LeonardoXML();
         private bool IsSerrverWork = false;
         private bool CanSend = false;
         private Process EZ;
@@ -205,101 +205,119 @@ namespace SocketSend
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            tbl_log.Text = "";
-            #region 發送文字
-            /*
-            var msg = tb_msg.Text.Trim() + "\r\n";
-            try
+            if (SendStatus.SelectedItem == null)
             {
-                if (Socket_sender.Connected)
-                {
-                    Encoding ei = Encoding.GetEncoding(950);
-                    int sendMsgLength = Socket_sender.Send(ei.GetBytes(msg));
-                }
-                else
-                {
-                    IsSerrverWork = false;
-                }
-
+                SetStatus("請選擇傳送類別");
+                return;
             }
-            catch (ObjectDisposedException)
-            {
-                IsSerrverWork = false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                IsSerrverWork = false;
-            }
-            */
-            #endregion
-            #region 發送CSV檔
+            int OptionValue = SendStatus.SelectedIndex;
             string DataFilePath = "SendDATA";
-            string[] LDFiles = Directory.GetFiles(DataFilePath, "*.csv");
-            foreach (var LDfileName in LDFiles)
+            string msg = "";
+            tbl_log.Text = "";
+            switch (OptionValue)
             {
-                //string FileName = LDfileName.Substring(DataFilePath.Length + 1);
-                var reader = new StreamReader(File.OpenRead(LDfileName));
-                string msg = "";
-                while (!reader.EndOfStream)
-                {
-                    msg += reader.ReadLine() + Environment.NewLine;
-                }
-                try
-                {
-                    if (Socket_sender.Connected)
+                case 0:
+                    msg = tb_msg.Text.Trim() + "\r\n";
+                    try
                     {
-                        int sendMsgLength = Socket_sender.Send(Encoding.UTF8.GetBytes(msg));
+                        if (Socket_sender.Connected)
+                        {
+                            Encoding ei = Encoding.GetEncoding(950);
+                            int sendMsgLength = Socket_sender.Send(ei.GetBytes(msg));
+                        }
+                        else
+                        {
+                            IsSerrverWork = false;
+                        }
+
                     }
-                    else
+                    catch (ObjectDisposedException)
                     {
                         IsSerrverWork = false;
                     }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        IsSerrverWork = false;
+                    }
+                    break;
+                case 1:
+                    string[] CSVFiles = Directory.GetFiles(DataFilePath, "*.csv");
+                    foreach (var LDfileName in CSVFiles)
+                    {
+                        var reader = new StreamReader(File.OpenRead(LDfileName));
+                        msg = "";
+                        while (!reader.EndOfStream)
+                        {
+                            msg += reader.ReadLine() + Environment.NewLine;
+                        }
+                        try
+                        {
+                            if (Socket_sender.Connected)
+                            {
+                                int sendMsgLength = Socket_sender.Send(Encoding.UTF8.GetBytes(msg));
+                            }
+                            else
+                            {
+                                IsSerrverWork = false;
+                            }
 
-                }
-                catch (ObjectDisposedException oe)
-                {
-                    IsSerrverWork = false;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    IsSerrverWork = false;
-                }
-                finally
-                {
-                    reader.Close();
-                }
-                Thread.Sleep(500);
+                        }
+                        catch (ObjectDisposedException oe)
+                        {
+                            IsSerrverWork = false;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            IsSerrverWork = false;
+                        }
+                        finally
+                        {
+                            reader.Close();
+                        }
+                        Thread.Sleep(500);
+                    }
+                    break;
+                case 2:
+                    string[] XMLFiles = Directory.GetFiles(DataFilePath, "*.xml");
+                    foreach (var LDfileName in XMLFiles)
+                    {
+                        var reader = new StreamReader(File.OpenRead(LDfileName));
+                        msg = "";
+                        while (!reader.EndOfStream)
+                        {
+                            msg += reader.ReadLine() + Environment.NewLine;
+                        }
+                        try
+                        {
+                            if (Socket_sender.Connected)
+                            {
+                                int sendMsgLength = Socket_sender.Send(Encoding.UTF8.GetBytes(msg));
+                            }
+                            else
+                            {
+                                IsSerrverWork = false;
+                            }
+
+                        }
+                        catch (ObjectDisposedException oe)
+                        {
+                            IsSerrverWork = false;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            IsSerrverWork = false;
+                        }
+                        finally
+                        {
+                            reader.Close();
+                        }
+                        Thread.Sleep(500);
+                    }
+                    break;
             }
-            #endregion
-            #region 發送XML檔
-            /*
-            var msg = hotaXMLmethod.CreateOnline01("0000001");
-            PGMethod.WriteLog(msg);
-            try
-            {
-                if (Socket_sender.Connected)
-                {
-                    int sendMsgLength = Socket_sender.Send(Encoding.UTF8.GetBytes(msg));
-                }
-                else
-                {
-                    IsSerrverWork = false;
-                }
-                
-            }
-            catch (ObjectDisposedException oe)
-            {
-                IsSerrverWork = false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                IsSerrverWork = false;
-            }
-            */
-            #endregion
         }
         private void SelectAllText(object sender, RoutedEventArgs e)
         {
@@ -308,79 +326,6 @@ namespace SocketSend
             {
                 textBox.Text = "";
             }
-        }
-        private bool processData(string remoteData)
-        {
-            leonardoProcess(remoteData);
-            return true;
-        }
-        private void leonardoProcess(string xmlData)
-        {
-            PGMethod.WriteLog(xmlData);
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xmlData.Trim());
-            XmlElement root = doc.DocumentElement;
-            string corr_id = root.GetAttribute("corr_Id");
-            string fileType = doc.GetElementsByTagName("trx_id")[0]?.InnerText;
-            string returnmsg;
-            int sendMsgLength;
-            switch (fileType)
-            {
-                case "TMESYC01":
-                    returnmsg = hotaXMLmethod.CreateTimeSyc02(corr_id);
-                    sendMsgLength = Socket_sender.Send(Encoding.UTF8.GetBytes(returnmsg));
-                    break;
-                case "CURINF01":
-                    returnmsg = hotaXMLmethod.CreateCURInfo02(corr_id);
-                    sendMsgLength = Socket_sender.Send(Encoding.UTF8.GetBytes(returnmsg));
-                    returnmsg = hotaXMLmethod.CreateWorkEND01(corr_id);
-                    sendMsgLength = Socket_sender.Send(Encoding.UTF8.GetBytes(returnmsg));
-                    break;
-                case "WRKEND02":
-                    //SendXml();
-                    break;
-                default:
-                    PGMethod.WriteLog("無法判斷檔案類型:" + fileType);
-                    break;
-            }
-        }
-        private void SendXml()
-        {
-            string DataFilePath = "SendDATA";
-            string[] LDFiles = Directory.GetFiles(DataFilePath, "*.csv");
-            if (LDFiles.Length == 0) return;
-            var reader = new StreamReader(File.OpenRead(LDFiles[0]));
-            string msg = "";
-            while (!reader.EndOfStream)
-            {
-                msg += reader.ReadLine() + "\n";
-            }
-            try
-            {
-                if (Socket_sender.Connected)
-                {
-                    int sendMsgLength = Socket_sender.Send(Encoding.UTF8.GetBytes(msg));
-                }
-                else
-                {
-                    IsSerrverWork = false;
-                }
-
-            }
-            catch (ObjectDisposedException)
-            {
-                IsSerrverWork = false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                IsSerrverWork = false;
-            }
-            finally
-            {
-                reader.Close();
-            }
-            File.Move(LDFiles[0], Path.ChangeExtension(LDFiles[0], ".bak"));
         }
         private void btn_exit_Click(object sender, RoutedEventArgs e)
         {

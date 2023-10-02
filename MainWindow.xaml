@@ -46,11 +46,18 @@
             <Grid Grid.Row="1" Grid.Column="0">
                 <Label Content="發送訊息" Margin="10" FontSize="14" FontFamily="Arial Black" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
-            <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
+            <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
                 <TextBox x:Name="tb_msg" Margin="10" FontSize="14" FontFamily="Arial Black" Padding="7"/>
             </Grid>
+            <Grid Grid.Row="1" Grid.Column="3">
+                <Button x:Name="btn_send" Content="發送" Margin="10" Click="Button_Click"/>
+            </Grid>
             <Grid Grid.Row="1" Grid.Column="4">
-                <Button x:Name="btn_send" Content="發送YG CSV" Margin="10" Click="Button_Click"/>
+                <ComboBox x:Name="SendStatus" Margin="10" Padding="7" FontSize="16">
+                    <ListBoxItem Content="Input"/>
+                    <ListBoxItem Content="CSV"/>
+                    <ListBoxItem Content="XML"/>
+                </ComboBox>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Margin="30, 10, 10, 10">
@@ -70,14 +77,5 @@
                 <Button x:Name="btn_exit" Content="離開" Margin="10" Background="#FFF0958B" BorderBrush="#FFE47569" FontFamily="Arial Black" FontSize="14" Click="btn_exit_Click"/>
             </Grid>
         </Grid>
-        
-        
-        
-        
-        
-        
-        
-        
-        
     </Grid>
 </Window>
